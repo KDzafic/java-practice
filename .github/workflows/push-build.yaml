@@ -23,4 +23,8 @@ jobs:
           CHANGED_MODULE=$(git diff --name-only HEAD^ HEAD | grep -o '^[^/]*/' | sort -u | head -n 1)
           echo "changed_module=$CHANGED_MODULE" >> $GITHUB_ENV
       - name: Build with Maven
-        run: mvn package -pl ${CHANGED_MODULE} -am
+        if: contains(env.changed_module, 'ChangedModule')
+        run: |
+          cd AnotherModule
+          mvn package
+          cd ..
